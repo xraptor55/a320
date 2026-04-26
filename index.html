@@ -47,7 +47,7 @@ button {
     flex-direction: column;
 }
 
-/* TOP AREA */
+/* CONTENT AREA */
 #content {
     flex: 1;
     display: flex;
@@ -124,7 +124,7 @@ button {
 <script>
 
 /* -------------------------
-   📚 DATABASE (ADD HERE)
+   DATABASE (EDIT HERE)
 --------------------------*/
 const data = `
 Length? 37.57m
@@ -138,7 +138,7 @@ Max altitude? 41000 ft
 `;
 
 /* -------------------------
-   PARSE DATA
+   PARSE
 --------------------------*/
 let qaList = data.trim().split("\n").map(line => {
     let [q, a] = line.split("?");
@@ -149,7 +149,7 @@ let qaList = data.trim().split("\n").map(line => {
 });
 
 /* -------------------------
-   SLIDER SETUP
+   SLIDER
 --------------------------*/
 const slider = document.getElementById("slider");
 const sliderValue = document.getElementById("sliderValue");
@@ -170,12 +170,12 @@ let currentIndex = 0;
 let revealed = false;
 
 /* -------------------------
-   START QUIZ (RANDOM ORDER)
+   START QUIZ
 --------------------------*/
 function startQuiz() {
     let num = parseInt(slider.value);
 
-    // 🔀 Fisher–Yates shuffle (true random)
+    // 🔀 Fisher–Yates shuffle
     let shuffled = [...qaList];
 
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -214,21 +214,42 @@ function showQuestion() {
 --------------------------*/
 function handleButton() {
     if (!revealed) {
+
         document.getElementById("answer").innerText =
             selectedQuestions[currentIndex].answer;
 
         document.getElementById("mainBtn").innerText = "NEXT";
         revealed = true;
+
     } else {
+
         currentIndex++;
 
-    if (currentIndex >= selectedQuestions.length) {
-    showEndScreen();
-    return;
-    }
+        if (currentIndex >= selectedQuestions.length) {
+            showEndScreen();
+            return;
+        }
 
         showQuestion();
     }
+}
+
+/* -------------------------
+   END SCREEN FIX (NO RELOAD BUG)
+--------------------------*/
+function showEndScreen() {
+    alert("Finished!");
+
+    // reset state
+    selectedQuestions = [];
+    currentIndex = 0;
+    revealed = false;
+
+    // reset UI
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("start").style.display = "block";
+
+    document.getElementById("answer").innerText = "";
 }
 
 </script>
