@@ -20,6 +20,12 @@ body {
     margin-top: 80px;
 }
 
+#title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 input[type=range] {
     width: 250px;
 }
@@ -75,10 +81,11 @@ button {
     text-align: center;
 }
 
-/* ANSWER */
+/* ANSWER (BIGGER + BOLD) */
 #answer {
     margin-top: 15px;
-    font-size: 22px;
+    font-size: 26px;
+    font-weight: bold;
     color: #7dd3fc;
     min-height: 30px;
     text-align: center;
@@ -100,6 +107,8 @@ button {
 
 <!-- START SCREEN -->
 <div id="start">
+    <div id="title">A320 Limitation</div>
+
     <h2>Number of Limitations?</h2>
 
     <input type="range" id="slider" min="1">
@@ -123,9 +132,7 @@ button {
 
 <script>
 
-/* -------------------------
-   DATABASE (EDIT HERE)
---------------------------*/
+/* DATABASE */
 const data = `
 Load acceleration limits (clean)? -1 g to +2,5 g
 Load acceleration limits (other than clean)? 0 g to +2 g
@@ -231,9 +238,7 @@ Pitch at tail strike, shock absorber fully extended? 13,5°
 Pitch at tail strike, shock absorber fully compressed? 11,7°
 `;
 
-/* -------------------------
-   PARSE
---------------------------*/
+/* PARSE */
 let qaList = data.trim().split("\n").map(line => {
     let [q, a] = line.split("?");
     return {
@@ -242,9 +247,7 @@ let qaList = data.trim().split("\n").map(line => {
     };
 });
 
-/* -------------------------
-   SLIDER
---------------------------*/
+/* SLIDER */
 const slider = document.getElementById("slider");
 const sliderValue = document.getElementById("sliderValue");
 
@@ -256,29 +259,22 @@ slider.oninput = () => {
     sliderValue.innerText = slider.value;
 };
 
-/* -------------------------
-   STATE
---------------------------*/
+/* STATE */
 let selectedQuestions = [];
 let currentIndex = 0;
 let revealed = false;
 
-/* -------------------------
-   START QUIZ
---------------------------*/
+/* START */
 function startQuiz() {
     let num = parseInt(slider.value);
 
-    // 🔀 Fisher–Yates shuffle
     let shuffled = [...qaList];
-
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
     selectedQuestions = shuffled.slice(0, num);
-
     currentIndex = 0;
 
     document.getElementById("start").style.display = "none";
@@ -287,9 +283,7 @@ function startQuiz() {
     showQuestion();
 }
 
-/* -------------------------
-   SHOW QUESTION
---------------------------*/
+/* SHOW QUESTION */
 function showQuestion() {
     let q = selectedQuestions[currentIndex];
 
@@ -303,20 +297,15 @@ function showQuestion() {
         (currentIndex + 1) + " / " + selectedQuestions.length;
 }
 
-/* -------------------------
-   BUTTON LOGIC
---------------------------*/
+/* BUTTON */
 function handleButton() {
     if (!revealed) {
-
         document.getElementById("answer").innerText =
             selectedQuestions[currentIndex].answer;
 
         document.getElementById("mainBtn").innerText = "NEXT";
         revealed = true;
-
     } else {
-
         currentIndex++;
 
         if (currentIndex >= selectedQuestions.length) {
@@ -328,18 +317,14 @@ function handleButton() {
     }
 }
 
-/* -------------------------
-   END SCREEN FIX (NO RELOAD BUG)
---------------------------*/
+/* END SCREEN */
 function showEndScreen() {
     alert("Finished!");
 
-    // reset state
     selectedQuestions = [];
     currentIndex = 0;
     revealed = false;
 
-    // reset UI
     document.getElementById("quiz").style.display = "none";
     document.getElementById("start").style.display = "block";
 
