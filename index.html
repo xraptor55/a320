@@ -14,7 +14,7 @@ body {
     height: 100vh;
 }
 
-/* START */
+/* START SCREEN */
 #start {
     text-align: center;
     margin-top: 80px;
@@ -40,24 +40,24 @@ button {
     width: 220px;
 }
 
-/* QUIZ WRAPPER */
+/* QUIZ LAYOUT */
 #quiz {
     display: none;
     height: 100vh;
     flex-direction: column;
 }
 
-/* TOP AREA (FIXED HEIGHT → NO JUMPING) */
+/* TOP AREA */
 #content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    height: 70vh; /* ključna stabilna višina */
+    height: 70vh;
     padding: 0 20px;
     box-sizing: border-box;
+    position: relative;
 }
 
 /* PROGRESS */
@@ -68,25 +68,25 @@ button {
     opacity: 0.6;
 }
 
-/* QUESTION (CENTERED, FIXED POSITION) */
+/* QUESTION */
 #question {
     font-size: 26px;
     font-weight: bold;
     text-align: center;
 }
 
-/* ANSWER (DOES NOT MOVE ANYTHING) */
+/* ANSWER */
 #answer {
     margin-top: 15px;
     font-size: 22px;
     color: #7dd3fc;
-    min-height: 30px; /* rezerviran prostor → NI SKAKANJA */
+    min-height: 30px;
     text-align: center;
 }
 
-/* BIG BOTTOM BUTTON */
+/* BIG BUTTON */
 #mainBtn {
-    height: 30vh; /* 🔥 večji del ekrana */
+    height: 30vh;
     width: 100%;
     font-size: 24px;
     border: none;
@@ -98,11 +98,13 @@ button {
 
 <body>
 
-<!-- START -->
+<!-- START SCREEN -->
 <div id="start">
     <h2>Number of Limitations?</h2>
+
     <input type="range" id="slider" min="1">
     <div id="sliderValue"></div>
+
     <button onclick="startQuiz()">Start</button>
 </div>
 
@@ -121,17 +123,23 @@ button {
 
 <script>
 
+/* -------------------------
+   📚 DATABASE (ADD HERE)
+--------------------------*/
 const data = `
 Length? 37.57m
 Height? 11.75m
 Wingspan? 34.1m
 Max takeoff weight? 77000 kg
 Max landing weight? 64500 kg
-Fuel capacity? 19300 kg
-Max window open speed? 200 kt
-Max windshield wipers speed? 230 kt
+Fuel capacity? 24210 L
+Cruise speed? 0.78 Mach
+Max altitude? 41000 ft
 `;
 
+/* -------------------------
+   PARSE DATA
+--------------------------*/
 let qaList = data.trim().split("\n").map(line => {
     let [q, a] = line.split("?");
     return {
@@ -140,7 +148,9 @@ let qaList = data.trim().split("\n").map(line => {
     };
 });
 
-// slider
+/* -------------------------
+   SLIDER SETUP
+--------------------------*/
 const slider = document.getElementById("slider");
 const sliderValue = document.getElementById("sliderValue");
 
@@ -152,14 +162,27 @@ slider.oninput = () => {
     sliderValue.innerText = slider.value;
 };
 
+/* -------------------------
+   STATE
+--------------------------*/
 let selectedQuestions = [];
 let currentIndex = 0;
 let revealed = false;
 
+/* -------------------------
+   START QUIZ (RANDOM ORDER)
+--------------------------*/
 function startQuiz() {
     let num = parseInt(slider.value);
 
-    let shuffled = [...qaList].sort(() => 0.5 - Math.random());
+    // 🔀 Fisher–Yates shuffle (true random)
+    let shuffled = [...qaList];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
     selectedQuestions = shuffled.slice(0, num);
 
     currentIndex = 0;
@@ -170,6 +193,9 @@ function startQuiz() {
     showQuestion();
 }
 
+/* -------------------------
+   SHOW QUESTION
+--------------------------*/
 function showQuestion() {
     let q = selectedQuestions[currentIndex];
 
@@ -183,6 +209,9 @@ function showQuestion() {
         (currentIndex + 1) + " / " + selectedQuestions.length;
 }
 
+/* -------------------------
+   BUTTON LOGIC
+--------------------------*/
 function handleButton() {
     if (!revealed) {
         document.getElementById("answer").innerText =
