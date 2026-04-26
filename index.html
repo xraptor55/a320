@@ -127,14 +127,108 @@ button {
    DATABASE (EDIT HERE)
 --------------------------*/
 const data = `
-Length? 37.57m
-Height? 11.75m
-Wingspan? 34.1m
-Max takeoff weight? 77000 kg
-Max landing weight? 64500 kg
-Fuel capacity? 24210 L
-Cruise speed? 0.78 Mach
-Max altitude? 41000 ft
+Load acceleration limits (clean)? -1 g to +2,5 g
+Load acceleration limits (other than clean)? 0 g to +2 g
+Max operating altitude? 39 800 ft
+Max Slats and/or flaps extended altitude? 20 000 ft
+Max landing altitude? 9200 ft
+Min landing altitude? -1000 ft
+Min operating temperature? -72°C
+Max runway slope? ±2 %
+Normal runway width? 45 m
+Min runway width? 30 m
+Max x-wind for takeoff/landing? 38 kt
+Max cockpit window open speed? 200 kt
+Max speed Flaps 1? 230 kt
+Max speed Flaps 1+F? 215 kt
+Max speed Flaps 2? 200 kt
+Max speed Flaps 3? 185 kt
+Max speed Flaps FULL? 177 kt
+Max operating speed Vmo? 350 kt
+Max operating speed Mmo? 0,82 M
+Max speed landing gear extended, Vle (kt)? 280 kt
+Max speed landing gear extended, Vle (M)? 0,67 M
+Max speed landing gear extending, Vlo (kt)? 250 kt
+Max speed landing gear extending, Vlo (M)? 0,60 M
+Max speed landing gear retracting, Vlo (kt)? 220 kt
+Max speed landing gear retracting, Vlo (M)? 0,54 M
+Max tire speed? 195 kt
+Min control speed Vmcl? 109 kt
+Max wipers operating speed? 230 kt
+Max taxi weight? 77 400 kg
+Max takeoff weight? 77 000 kg
+Max landing weight? 64 500 kg
+Max zero fuel weight? 61 000 kg
+Min weight? 37 230 kg
+Avionics ventilation limit 49°C < OAT <= 55°C? 2 h
+Avionics ventilation limit 55°C < OAT <= 60°C? 1 h
+Avionics ventilation limit 60°C < OAT <= 64°C? 0,5 h
+Max + differential pressure? 9 PSI
+Max - differential pressure? -1 PSI
+Max safety relief valve pressure? 8,6 PSI
+Min  autopilot use height at takeoff? 100 ft
+Min  autopilot use height in circling approach? 500 ft
+Min  autopilot use height for landing CAT I? 160 ft
+Min  autopilot use height for landing CAT II? 80 ft
+Min  autopilot use height after go-around? 100 ft
+Min  autopilot use height in all other phases? 500 ft
+Min  autopilot use height for FINAL APP, V/S or FPA mode? 250 ft
+Alert height? 100 ft
+Max x-wind for ILS/MLS CAT II/CAT III autoland? 20 kt
+Max headwind for ILS/MLS CAT II/CAT III autoland? 30 kt
+Max tailwind for ILS/MLS CAT II/CAT III autoland? 10 kt
+Max ILS G/S beam angle for automatic landing? -3,15°
+Min ILS G/S beam angle for automatic landing? -2,5°
+Max consecutive APU start attempts before crew must wait 60 min? 3
+Max APU N speed? 107%
+Max APU operational altitude? 41 000 ft
+Max APU battery start altitude? 25 000 ft
+APU bleed max altitude to assist engine start? 20 000 ft
+APU bleed max altitude for air conditioning and pressurization (single pack ops)? 22 500 ft
+APU bleed max altitude for air conditioning and pressurization (dual pack ops)? 15 000 ft
+Takeoff all engines operative thrust time limit? 5 min
+Takeoff one engine operative thrust time limit? 10 min
+Max EGT limit takeoff thrust (IAE)? 635°C
+Max EGT limit MCT thrust (IAE)? 610°C
+Max EGT limit starting on ground (IAE)? 635°C
+Max N1 speed (IAE)? 100%
+Max N2 speed (IAE)? 100%
+Max oil continuous temperature (IAE)? 155°C
+Max transient oil temperature 15 min (IAE)? 165°C
+Min starting temperature (IAE)? -40°C
+Min temperature before IDLE is exceeded (IAE)? -10°C
+Min temperature before takeoff (IAE)? 50°C
+Min oil quantity (IAE)? 11 qt
+Estimated oil consumption (IAE)? 0,3 qt/h
+Min oil pressure (IAE)? 60 PSI
+Cooling period after 3 failed start cycles (IAE)? 30 min
+How many successive start cycles before 30 min cooling time (IAE)? 3
+Max reverse thrust should not be used below? 70 kt
+Max x-wind for engine start (IAE)? 35 kt
+Max altitude flaps extended? 20 000 ft
+Min JET-A1 temperature? -43°C
+Max JET-A1 temperature? 54°C
+Max allowed fuel imbalance at takeoff, inner tanks, full? 500 kg
+Max allowed fuel imbalance at takeoff, outer tanks? 370 kg
+Max allowed fuel imbalance at landing, inner tanks, full? 1500 kg
+Max allowed fuel imbalance at landing, outer tanks? 690 kg
+Min fuel quantity for takeoff? 1500 kg
+Icing conditions exist when OAT at or below? 10°C
+Severe ice accretion (mm)? 5 mm
+Severe ice accretion (in)? 0,2 in
+Max brake temperature for takeoff? 300°C
+Max NWS angle? ±85°
+Max taxi speed with 1 tire per gear deflated? 7 kt
+Max taxi speed with 2 tire per gear deflated? 3 kt
+Max NWS angle when tire deflated? 30°
+IR ground alignment latitude between? 73° North/South
+Length? 37,57 m
+Height? 11,75 m
+Wingspan? 34,1 m
+Wingspan with sharklets? 35,8 m
+Min 180° turn width? 24 m
+Pitch at tail strike, shock absorber fully extended? 13,5°
+Pitch at tail strike, shock absorber fully compressed? 11,7°
 `;
 
 /* -------------------------
