@@ -13,16 +13,13 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background: #0a1a26;
     color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     height: 100vh;
 }
 
-/* START */
+/* START SCREEN */
 #start {
-    margin-top: 60px;
     text-align: center;
+    margin-top: 80px;
 }
 
 input[type=range] {
@@ -45,52 +42,62 @@ button {
     width: 220px;
 }
 
-/* QUIZ */
+/* QUIZ LAYOUT */
 #quiz {
     display: none;
-    width: 100%;
-    max-width: 420px;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+}
+
+/* CENTER CONTENT */
+#content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 40px;
 }
 
 /* QUESTION */
 #question {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: bold;
-    margin-top: 40px;
+    text-align: center;
 }
 
 /* ANSWER */
 #answer {
-    text-align: center;
+    margin-top: 10px; /* cca 1 cm */
     font-size: 22px;
     color: #7dd3fc;
     display: none;
+    text-align: center;
 }
 
-/* BUTTON */
+/* BUTTON FULL WIDTH */
 #mainBtn {
-    margin-bottom: 30px;
+    width: 100%;
+    padding: 20px;
+    font-size: 20px;
+    border: none;
     background: #22c55e;
 }
 
 /* PROGRESS */
 #progress {
+    text-align: center;
     font-size: 14px;
-    opacity: 0.7;
-    margin-top: 10px;
+    opacity: 0.6;
+    margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- START -->
 <div id="start">
     <h2>Number of Limitations?</h2>
     <input type="range" id="slider" min="1">
@@ -98,19 +105,21 @@ button {
     <button onclick="startQuiz()">Start</button>
 </div>
 
+<!-- QUIZ -->
 <div id="quiz">
-    <div>
+
+    <div id="content">
         <div id="progress"></div>
         <div id="question"></div>
+        <div id="answer"></div>
     </div>
 
-    <div id="answer"></div>
-
     <button id="mainBtn" onclick="handleButton()">REVEAL</button>
+
 </div>
 
 <script>
-// 👉 DODAJ VPRAŠANJA
+// DATA
 const data = `
 Length? 37.57m
 Height? 11.75m
@@ -129,7 +138,7 @@ let qaList = data.trim().split("\n").map(line => {
     };
 });
 
-// slider setup
+// slider
 const slider = document.getElementById("slider");
 const sliderValue = document.getElementById("sliderValue");
 
@@ -191,7 +200,7 @@ function handleButton() {
     }
 }
 
-// SERVICE WORKER REGISTER
+// SERVICE WORKER
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("sw.js");
 }
