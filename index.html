@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="sl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A320 Trainer</title>
+
+<link rel="manifest" href="manifest.json">
 
 <style>
 body {
@@ -14,130 +16,101 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100vh;
 }
 
-/* HEADER */
-h1 {
-    margin-top: 20px;
-    font-size: 22px;
-}
-
-/* START SCREEN */
+/* START */
 #start {
+    margin-top: 60px;
     text-align: center;
-    margin-top: 40px;
 }
 
-input {
-    padding: 12px;
-    font-size: 18px;
-    width: 120px;
-    text-align: center;
-    border-radius: 10px;
-    border: none;
+input[type=range] {
+    width: 250px;
+}
+
+#sliderValue {
+    margin-top: 10px;
+    font-size: 20px;
 }
 
 button {
-    margin-top: 15px;
-    padding: 14px 20px;
-    font-size: 16px;
+    margin-top: 20px;
+    padding: 16px;
+    font-size: 18px;
     border-radius: 12px;
     border: none;
     background: #1e90ff;
     color: white;
-    width: 200px;
+    width: 220px;
 }
 
-/* CARD */
+/* QUIZ */
 #quiz {
     display: none;
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+    height: 100%;
     padding: 20px;
-}
-
-.card {
-    background: #132b3a;
-    border-radius: 20px;
-    padding: 30px 20px;
-    margin-top: 20px;
-    min-height: 180px;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    transition: transform 0.3s;
+    justify-content: space-between;
 }
 
-.card.flip {
-    transform: rotateY(180deg);
-}
-
-.question {
-    font-size: 22px;
+/* QUESTION */
+#question {
+    font-size: 24px;
     font-weight: bold;
+    margin-top: 40px;
 }
 
-.answer {
-    margin-top: 15px;
-    font-size: 20px;
+/* ANSWER */
+#answer {
+    text-align: center;
+    font-size: 22px;
     color: #7dd3fc;
     display: none;
 }
 
-/* BUTTONS */
-.controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.reveal {
+/* BUTTON */
+#mainBtn {
+    margin-bottom: 30px;
     background: #22c55e;
-}
-
-.next {
-    background: #f59e0b;
 }
 
 /* PROGRESS */
 #progress {
-    margin-top: 10px;
     font-size: 14px;
     opacity: 0.7;
+    margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>A320 Trainer</h1>
-
 <div id="start">
-    <p>Koliko vprašanj?</p>
-    <input type="number" id="numQuestions" min="1">
-    <br>
+    <h2>Number of Limitations?</h2>
+    <input type="range" id="slider" min="1">
+    <div id="sliderValue"></div>
     <button onclick="startQuiz()">Start</button>
 </div>
 
 <div id="quiz">
-    <div id="progress"></div>
-
-    <div class="card" id="card">
-        <div class="question" id="question"></div>
-        <div class="answer" id="answer"></div>
+    <div>
+        <div id="progress"></div>
+        <div id="question"></div>
     </div>
 
-    <div class="controls">
-        <button class="reveal" onclick="revealAnswer()">REVEAL</button>
-        <button class="next" onclick="nextQuestion()">NEXT</button>
-    </div>
+    <div id="answer"></div>
+
+    <button id="mainBtn" onclick="handleButton()">REVEAL</button>
 </div>
 
 <script>
-// 👉 DODAJ VPRAŠANJA TUKAJ
+// 👉 DODAJ VPRAŠANJA
 const data = `
 Length? 37.57m
 Height? 11.75m
@@ -156,16 +129,24 @@ let qaList = data.trim().split("\n").map(line => {
     };
 });
 
+// slider setup
+const slider = document.getElementById("slider");
+const sliderValue = document.getElementById("sliderValue");
+
+slider.max = qaList.length;
+slider.value = qaList.length;
+sliderValue.innerText = slider.value;
+
+slider.oninput = () => {
+    sliderValue.innerText = slider.value;
+};
+
 let selectedQuestions = [];
 let currentIndex = 0;
+let revealed = false;
 
 function startQuiz() {
-    let num = parseInt(document.getElementById("numQuestions").value);
-
-    if (!num || num < 1) {
-        alert("Vnesi število vprašanj!");
-        return;
-    }
+    let num = parseInt(slider.value);
 
     let shuffled = [...qaList].sort(() => 0.5 - Math.random());
     selectedQuestions = shuffled.slice(0, num);
@@ -173,7 +154,7 @@ function startQuiz() {
     currentIndex = 0;
 
     document.getElementById("start").style.display = "none";
-    document.getElementById("quiz").style.display = "block";
+    document.getElementById("quiz").style.display = "flex";
 
     showQuestion();
 }
@@ -185,24 +166,34 @@ function showQuestion() {
     document.getElementById("answer").innerText = q.answer;
     document.getElementById("answer").style.display = "none";
 
+    document.getElementById("mainBtn").innerText = "REVEAL";
+    revealed = false;
+
     document.getElementById("progress").innerText =
         (currentIndex + 1) + " / " + selectedQuestions.length;
 }
 
-function revealAnswer() {
-    document.getElementById("answer").style.display = "block";
+function handleButton() {
+    if (!revealed) {
+        document.getElementById("answer").style.display = "block";
+        document.getElementById("mainBtn").innerText = "NEXT";
+        revealed = true;
+    } else {
+        currentIndex++;
+
+        if (currentIndex >= selectedQuestions.length) {
+            alert("Finished!");
+            location.reload();
+            return;
+        }
+
+        showQuestion();
+    }
 }
 
-function nextQuestion() {
-    currentIndex++;
-
-    if (currentIndex >= selectedQuestions.length) {
-        alert("Konec!");
-        location.reload();
-        return;
-    }
-
-    showQuestion();
+// SERVICE WORKER REGISTER
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
 }
 </script>
 
