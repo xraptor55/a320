@@ -1,10 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="sl">
 <head>
-    <title>Moja stran</title>
+<meta charset="UTF-8">
+<title>A320 Limitations Trainer</title>
+<style>
+    body {
+        font-family: Arial;
+        text-align: center;
+        background: #0b1d2a;
+        color: white;
+        padding: 40px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 10px;
+        cursor: pointer;
+    }
+
+    #card {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid white;
+        border-radius: 10px;
+    }
+</style>
 </head>
 <body>
-    <h1>Pozdravljen svet!</h1>
-    <p>To je moja prva GitHub stran. matej tle </p>
+
+<h1>A320 Limitations Trainer</h1>
+
+<div id="start">
+    <p>Koliko vprašanj želiš?</p>
+    <input type="number" id="numQuestions" min="1">
+    <br>
+    <button onclick="startQuiz()">Start</button>
+</div>
+
+<div id="quiz" style="display:none;">
+    <div id="card">
+        <h2 id="question"></h2>
+        <p id="answer" style="display:none;"></p>
+    </div>
+
+    <button onclick="revealAnswer()">REVEAL</button>
+    <button onclick="nextQuestion()">NEXT</button>
+</div>
+
+<script>
+// 👉 TUKAJ DODAJAŠ VPRAŠANJA
+const data = `
+Length? 37.57m
+Height? 11.75m
+Wingspan? 34.1m
+Max takeoff weight? 77000 kg
+Max landing weight? 64500 kg
+`;
+
+// Pretvorba v array
+let qaList = data.trim().split("\n").map(line => {
+    let [q, a] = line.split("?");
+    return {
+        question: q + "?",
+        answer: a.trim()
+    };
+});
+
+let selectedQuestions = [];
+let currentIndex = 0;
+
+function startQuiz() {
+    let num = parseInt(document.getElementById("numQuestions").value);
+
+    if (!num || num < 1) {
+        alert("Vnesi število vprašanj!");
+        return;
+    }
+
+    // shuffle
+    let shuffled = [...qaList].sort(() => 0.5 - Math.random());
+
+    selectedQuestions = shuffled.slice(0, num);
+    currentIndex = 0;
+
+    document.getElementById("start").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+
+    showQuestion();
+}
+
+function showQuestion() {
+    let q = selectedQuestions[currentIndex];
+    document.getElementById("question").innerText = q.question;
+    document.getElementById("answer").innerText = q.answer;
+    document.getElementById("answer").style.display = "none";
+}
+
+function revealAnswer() {
+    document.getElementById("answer").style.display = "block";
+}
+
+function nextQuestion() {
+    currentIndex++;
+
+    if (currentIndex >= selectedQuestions.length) {
+        alert("Konec!");
+        location.reload();
+        return;
+    }
+
+    showQuestion();
+}
+</script>
+
 </body>
 </html>
