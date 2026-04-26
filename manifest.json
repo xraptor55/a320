@@ -1,0 +1,9 @@
+{
+  "name": "A320 Trainer",
+  "short_name": "A320",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a1a26",
+  "theme_color": "#0a1a26",
+  "icons": []
+}
