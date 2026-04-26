@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A320 Trainer</title>
 
-<link rel="manifest" href="manifest.json">
-
 <style>
 body {
     margin: 0;
@@ -16,7 +14,7 @@ body {
     height: 100vh;
 }
 
-/* START SCREEN */
+/* START */
 #start {
     text-align: center;
     margin-top: 80px;
@@ -42,55 +40,58 @@ button {
     width: 220px;
 }
 
-/* QUIZ LAYOUT */
+/* QUIZ WRAPPER */
 #quiz {
     display: none;
     height: 100vh;
-    display: flex;
     flex-direction: column;
 }
 
-/* CENTER CONTENT */
+/* TOP AREA (FIXED HEIGHT → NO JUMPING) */
 #content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding-top: 40px;
+
+    height: 70vh; /* ključna stabilna višina */
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
-/* QUESTION */
+/* PROGRESS */
+#progress {
+    position: absolute;
+    top: 10px;
+    font-size: 14px;
+    opacity: 0.6;
+}
+
+/* QUESTION (CENTERED, FIXED POSITION) */
 #question {
     font-size: 26px;
     font-weight: bold;
     text-align: center;
 }
 
-/* ANSWER */
+/* ANSWER (DOES NOT MOVE ANYTHING) */
 #answer {
-    margin-top: 10px; /* cca 1 cm */
+    margin-top: 15px;
     font-size: 22px;
     color: #7dd3fc;
-    display: none;
+    min-height: 30px; /* rezerviran prostor → NI SKAKANJA */
     text-align: center;
 }
 
-/* BUTTON FULL WIDTH */
+/* BIG BOTTOM BUTTON */
 #mainBtn {
+    height: 30vh; /* 🔥 večji del ekrana */
     width: 100%;
-    padding: 20px;
-    font-size: 20px;
+    font-size: 24px;
     border: none;
     background: #22c55e;
-}
-
-/* PROGRESS */
-#progress {
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.6;
-    margin-top: 20px;
+    color: white;
 }
 </style>
 </head>
@@ -119,17 +120,18 @@ button {
 </div>
 
 <script>
-// DATA
+
 const data = `
 Length? 37.57m
 Height? 11.75m
 Wingspan? 34.1m
 Max takeoff weight? 77000 kg
 Max landing weight? 64500 kg
-Fuel capacity? 24210 L
+Fuel capacity? 19300 kg
+Max window open speed? 200 kt
+Max windshield wipers speed? 230 kt
 `;
 
-// parsing
 let qaList = data.trim().split("\n").map(line => {
     let [q, a] = line.split("?");
     return {
@@ -172,8 +174,7 @@ function showQuestion() {
     let q = selectedQuestions[currentIndex];
 
     document.getElementById("question").innerText = q.question;
-    document.getElementById("answer").innerText = q.answer;
-    document.getElementById("answer").style.display = "none";
+    document.getElementById("answer").innerText = "";
 
     document.getElementById("mainBtn").innerText = "REVEAL";
     revealed = false;
@@ -184,7 +185,9 @@ function showQuestion() {
 
 function handleButton() {
     if (!revealed) {
-        document.getElementById("answer").style.display = "block";
+        document.getElementById("answer").innerText =
+            selectedQuestions[currentIndex].answer;
+
         document.getElementById("mainBtn").innerText = "NEXT";
         revealed = true;
     } else {
@@ -200,10 +203,6 @@ function handleButton() {
     }
 }
 
-// SERVICE WORKER
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-}
 </script>
 
 </body>
