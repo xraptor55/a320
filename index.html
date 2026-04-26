@@ -222,11 +222,10 @@ function handleButton() {
     } else {
         currentIndex++;
 
-        if (currentIndex >= selectedQuestions.length) {
-            alert("Finished!");
-            location.reload();
-            return;
-        }
+    if (currentIndex >= selectedQuestions.length) {
+    showEndScreen();
+    return;
+    }
 
         showQuestion();
     }
